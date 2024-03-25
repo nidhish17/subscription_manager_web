@@ -1,0 +1,6 @@
+.select-custom-style {
+    cursor: pointer;
+    border-radius: 0;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
