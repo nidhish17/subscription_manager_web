@@ -1,0 +1,46 @@
+{% for channel in subscriptions %}
+    <tr id="channel-{{ channel.channel_id }}">
+        <td><img class="rounded-circle" src={{ channel.channel_prof_pic.default.url }} alt="yt-profile-pic"
+                 style="width:50px; height:50px"></td>
+        <td class="pt-3"><a href={{ channel.channel_url }} target="_blank"
+                            class="text-decoration-none">{{ channel.channel_name }}</a></td>
+        <td class="pt-3">
+            <div class="input-group">
+                <!-- form here -->
+                <form hx-post="{% url 'populate_category' %}" hx-trigger="submit" hx-target="#channel-{{ channel.channel_id }}" hx-swap="delete" id="channel-form{{ channel.channel_id }}">
+                    {% csrf_token %}
+                    {{ channel_form.category }}
+                    <input type="hidden" name="channel_name" value="{{ channel.channel_name }}"
+                           class="channel-name-input">
+                    <input type="hidden" name="channel_url" value="{{ channel.channel_url }}"
+                           class="channel-url-input">
+                    <input type="hidden" name="channel_pic"
+                           value="{{ channel.channel_prof_pic.default.url }}"
+                           class="channel-pic-input">
+                </form>
+                <button form="channel-form{{ channel.channel_id }}" class="btn btn-outline-success"><i class="bi bi-plus"></i></button>
+            </div>
+
+
+        </td>
+    </tr>
+{% endfor %}
+
+<td class="text-center" colspan="3">
+    {% if prev_pagination_token %}
+        <a id="load-more-subscription" class="btn btn-outline-warning" hx-trigger="click"
+           hx-get="{% url 'homepage' %}?page_token={{ prev_pagination_token }}" hx-swap="innerHTML"
+           hx-target="#subscription-container">Prev</a>
+    {% else %}
+        <a id="load-more-subscription" class="btn btn-outline-light disabled">Prev</a>
+    {% endif %}
+
+    {% if pagination_token %}
+        <a id="load-more-subscription" class="btn btn-outline-light" hx-trigger="click"
+           hx-get="{% url 'homepage' %}?page_token={{ pagination_token }}" hx-swap="innerHTML"
+           hx-target="#subscription-container">Next</a>
+    {% else %}
+        <a id="load-more-subscription" class="btn btn-outline-light disabled">Next</a>
+    {% endif %}
+</td>
+
